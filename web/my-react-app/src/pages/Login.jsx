@@ -39,16 +39,16 @@ const Auth = () => {
       if (isLogin) {
         const res = await axios.post(`${API}/api/auth/login`, {
           userEmail: email,
-          userPassword: password
+          userPassword: password,
         });
-        const user = res.data;
 
-        const token = user?.token || "demo-token";
+        console.log("LOGIN RESPONSE:", res.data);
+
+        const token = res.data?.token || "demo-token";
         localStorage.setItem("photolab_token", token);
-        localStorage.setItem("photolab_user", JSON.stringify(user));
+        localStorage.setItem("photolab_user", JSON.stringify(res.data));
 
-        // Redirect to HOME now
-        navigate("/home", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
 
       // SIGNUP
@@ -57,7 +57,7 @@ const Auth = () => {
           userFirstName: firstName,
           userLastName: lastName,
           userEmail: email,
-          userPassword: password
+          userPassword: password,
         };
 
         const res = await axios.post(`${API}/api/auth/register`, payload);
@@ -67,16 +67,17 @@ const Auth = () => {
         if (token) localStorage.setItem("photolab_token", token);
         localStorage.setItem("photolab_user", JSON.stringify(created));
 
-        // Make sure the UI switches back to the login form,
-        // inform the user, then navigate to auth/login view.
         setIsLogin(true);
         alert("Account created successfully. Please log in.");
-        navigate("/auth?mode=login", { replace: true });
+        navigate("/", { replace: true });
       }
-
     } catch (err) {
       console.error(err);
-      const message = err?.response?.data?.message || err?.response?.data || err?.message || "Request failed";
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        "Request failed";
       alert("Error: " + message);
     }
   };
@@ -97,7 +98,11 @@ const Auth = () => {
           <div className="auth-form-container">
             <div className="auth-header">
               <h2>{isLogin ? "Welcome Back" : "Create Account"}</h2>
-              <p>{isLogin ? "Sign in to access your PhotoLab account" : "Join PhotoLab and start capturing moments"}</p>
+              <p>
+                {isLogin
+                  ? "Sign in to access your PhotoLab account"
+                  : "Join PhotoLab and start capturing moments"}
+              </p>
             </div>
 
             <form className="auth-form" onSubmit={handleSubmit}>
@@ -105,29 +110,59 @@ const Auth = () => {
                 <div className="form-row signup-names">
                   <div className="form-group">
                     <label htmlFor="firstName">First Name</label>
-                    <input name="firstName" type="text" id="firstName" placeholder="Enter first name" required />
+                    <input
+                      name="firstName"
+                      type="text"
+                      id="firstName"
+                      placeholder="Enter first name"
+                      required
+                    />
                   </div>
                   <div className="form-group">
                     <label htmlFor="lastName">Last Name</label>
-                    <input name="lastName" type="text" id="lastName" placeholder="Enter last name" required />
+                    <input
+                      name="lastName"
+                      type="text"
+                      id="lastName"
+                      placeholder="Enter last name"
+                      required
+                    />
                   </div>
                 </div>
               )}
 
               <div className="form-group">
                 <label htmlFor="email">Email Address</label>
-                <input name="email" type="email" id="email" placeholder="Enter your email" required />
+                <input
+                  name="email"
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  required
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input name="password" type="password" id="password" placeholder="Enter your password" required />
+                <input
+                  name="password"
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  required
+                />
               </div>
 
               {!isLogin && (
                 <div className="form-group">
                   <label htmlFor="confirmPassword">Confirm Password</label>
-                  <input name="confirmPassword" type="password" id="confirmPassword" placeholder="Confirm your password" required />
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    required
+                  />
                 </div>
               )}
 
@@ -137,7 +172,9 @@ const Auth = () => {
                     <input type="checkbox" />
                     <span>Remember me</span>
                   </label>
-                  <a href="#forgot" className="forgot-password">Forgot Password?</a>
+                  <a href="#forgot" className="forgot-password">
+                    Forgot Password?
+                  </a>
                 </div>
               )}
 
@@ -151,8 +188,12 @@ const Auth = () => {
             </div>
 
             <div className="social-auth">
-              <button className="social-btn google-btn">Continue with Google</button>
-              <button className="social-btn facebook-btn">Continue with Facebook</button>
+              <button className="social-btn google-btn">
+                Continue with Google
+              </button>
+              <button className="social-btn facebook-btn">
+                Continue with Facebook
+              </button>
             </div>
 
             <div className="auth-toggle">
@@ -163,7 +204,6 @@ const Auth = () => {
                 </button>
               </p>
             </div>
-
           </div>
         </div>
       </div>
