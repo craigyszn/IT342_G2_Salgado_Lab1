@@ -13,11 +13,10 @@ DONE
     Screenshots:
         Register
         Login
+        Dashboard/Profile
+        Logout    
         
- 
 IN-PROGRESS
-   Dashboard/Profile
-        Logout
    
 TODO
    
